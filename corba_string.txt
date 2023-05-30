@@ -1,0 +1,93 @@
+problem3
+-----------------------------------------------------------------------------------
+ReverseModule.idl
+
+module ReverseModule{
+    interface Reverse{
+        string reverse_string(in string str);
+    };
+};
+---------------------------------------------------------------------------------
+//ReverseImpl
+
+import ReverseModule.ReversePOA;
+
+public class 
+
+extends ReversePOA {
+
+  public String reverse_string(String name) {
+    StringBuffer str = new StringBuffer(name);
+    str.reverse();
+    return ("Server Send " + str);
+  }
+}
+------------------------------------------------------------------------------
+
+//ReverseClient 
+
+import ReverseModule.*;
+import java.util.Scanner;
+import org.omg.CORBA.*;
+import org.omg.CosNaming.*;
+import org.omg.CosNaming.NamingContextPackage.*;
+import org.omg.PortableServer.*;
+
+class ReverseClient {
+
+  public static void main(String args[]) {
+    try {
+      // initialize the ORB
+      ORB orb = ORB.init(args, null);
+      NamingContextExt ncRef = NamingContextExtHelper.narrow(
+        orb.resolve_initial_references("NameService")
+      );
+      Reverse reverse = ReverseHelper.narrow(ncRef.resolve_str("Reverse"));
+
+      System.out.println("Enter String : ");
+      Scanner sc = new Scanner(System.in);
+      String str = sc.next();
+      String revStr = reverse.reverse_string(str);
+      System.out.println(revStr);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+------------------------------------------------------------------------------
+//ReverseServer 
+
+import ReverseModule.*;
+import org.omg.CORBA.*;
+import org.omg.CosNaming.*;
+import org.omg.CosNaming.NamingContextPackage.*;
+import org.omg.PortableServer.*;
+
+public class ReverseServer {
+
+  public static void main(String[] args) {
+    try {
+      ORB orb = ORB.init(args, null);
+
+      POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+      rootPOA.the_POAManager().activate();
+
+      Reverse h_ref = ReverseHelper.narrow(
+        rootPOA.servant_to_reference(new ReverseImpl())
+      );
+
+      NamingContextExt ncRef = NamingContextExtHelper.narrow(
+        orb.resolve_initial_references("NameService")
+      );
+      NameComponent path[] = ncRef.to_name("Reverse");
+      ncRef.rebind(path, h_ref);
+
+      orb.run();
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+}
+------------------------------------------------------------------------------
+
+

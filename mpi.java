@@ -1,12 +1,12 @@
 import mpi.MPI;
-
 import java.util.Scanner;
-
 import mpi.*;
 
 public class ScatterGather {
+	
     public static void main(String[] args) throws Exception{
         MPI.Init(args);
+	    
         //  Get rank of each process and size of communicator
         int rank = MPI.COMM_WORLD.Rank();
         int size = MPI.COMM_WORLD.Size();
@@ -78,3 +78,7 @@ public class ScatterGather {
         MPI.Finalize();
     }
 }
+
+
+//javac -cp $MPJ_HOME/lib/mpj.jar ScatterGather.java
+//$MPJ_HOME/bin/mpjrun.sh -np 4 ScatterGather.java 

@@ -1,0 +1,98 @@
+//AddServerIntf
+
+import java.rmi.*;
+
+public interface AddServerIntf extends Remote {
+
+	double add(double d1, double d2) throws RemoteException;
+
+
+}
+
+
+//AddServerImpl
+
+import java.rmi.*;
+import java.rmi.server.*;
+
+
+public class AddServerImpl extends UnicastRemoteObject implements AddServerIntf {
+
+	public AddServerImpl() throws RemoteException {
+
+	}
+
+	public double add(double d1, double d2) throws RemoteException {
+
+		return d1+d2;
+	}
+}
+
+
+//AddServer
+import java.rmi.*;
+
+public class AddServer {
+
+	public static void main(String[] args) throws RemoteException {
+
+		try {
+
+			AddServerImpl addServerImpl = new AddServerImpl();
+			String url = "rmi://127.0.0.1/AddServer";
+			Naming.rebind(url, addServerImpl);
+
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		
+		}
+	}
+}
+
+
+//AddClient
+import java.util.Scanner;
+import java.rmi.*;
+
+public class AddClient {
+
+
+	public static void main(String[] args) throws RemoteException {
+
+	try {
+
+	String url = "rmi://127.0.0.1/AddServer";
+	AddServerIntf addServerIntf =(AddServerIntf)Naming.lookup(url); 
+
+	Scanner sc = new Scanner(System.in);
+	
+	System.out.print("Enter first number: ");
+	double num1 = sc.nextDouble();
+
+	System.out.print("Enter second number: ");
+	double num2 = sc.nextDouble();
+
+	double res = addServerIntf.add(num1, num2);
+
+	System.out.print("Result is: "+res);
+
+	} catch (Exception e) {
+
+		System.out.println("Exception: "+e);
+	}
+	}
+}
+
+
+//RUN
+javac *.java
+rmic AddServerImpl
+
+SERVER FOLDER: AddServerIntf.class, AddServerImpl.class, AddServerImpl_Stub.class, AddServer.class
+CLIENT FOLDER: AddClient.class, AddServerImpl_Stub.class, AddServerIntf.class
+
+rmiregistry
+java AddServer
+
+java AddClient
+

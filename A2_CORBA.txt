@@ -129,3 +129,11 @@ orbd -ORBInitialPort 8000
 java ReverseServer -ORBInitiaPort 8000 -ORBInitialHostlocalhost
 
 java ReverseClient -ORBInitialPort 8000 -ORBInitialHostlocalhost
+
+
+//idlj -fall ReverseModule.idl
+//javac *.java ReverseModule/*.java
+//orbd -ORBInitialPort 1050&
+//java ReverseServer -ORBInitialPort 1050 -ORBInitialHostlocalhost&
+//java ReverseClient -ORBInitialPort 1050 -ORBInitialHostlocalhost
+

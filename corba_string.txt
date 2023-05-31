@@ -91,3 +91,10 @@ public class ReverseServer {
 ------------------------------------------------------------------------------
 
 
+
+//idlj -fall ReverseModule.idl
+//javac *.java ReverseModule/*.java
+//orbd -ORBInitialPort 1050&
+//java ReverseServer -ORBInitialPort 1050 -ORBInitialHostlocalhost&
+//java ReverseClient -ORBInitialPort 1050 -ORBInitialHostlocalhost
+
